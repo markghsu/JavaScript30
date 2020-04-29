@@ -59,37 +59,49 @@
 
 <script>
   const myKeys = document.querySelectorAll('.key');
+  const playSound = function(keyCode) {
+    const myKey = document.querySelector('.key[data-key="'+keyCode+'"]');
+    myKey.classList.add('playing'); // Should be polyfilled for IE
+    const myAudio = document.querySelector('audio[data-key="'+keyCode+'"]');
+    if(!myAudio) return;
+    myAudio.currentTime = 0; //RESET AUDIO
+    myAudio.play();
+  }
   myKeys.forEach((element) => {
     const keycode = element.dataset.key;
     element.addEventListener('mousedown', (evt) => {
-      element.classList.add('playing'); // Should be polyfilled for IE
-      const myAudio = document.querySelector('audio[data-key="'+keycode+'"]');
-      myAudio.play();
+      // CAN'T USE THIS IN ANONYMOUS FUNCTION HERE, BECAUSE IT IS BEING RUN IN GLOBAL SCOPE
+      // THIS WILL REFER TO WINDOW.
+      // IF WE PASS A NAMED FUNCTION, THEN THIS WILL BE PASSED AS THE ELEMENT THAT HAS
+      // THE EVENT ON IT.
+      playSound(keycode);
     });
     // element.addEventListener('click', (evt) => {
 
     // });
-    element.addEventListener('mouseup', (evt) => {
+    // element.addEventListener('mouseup', (evt) => {
+    //   element.classList.remove('playing'); // Should be polyfilled for IE
+    // });
+    element.addEventListener('transitionend', (evt) => { // MESSAGE FIRES WHEN CSS TRANSITION IS OVER.
+      if(evt.propertyName !== 'transform') return;
       element.classList.remove('playing'); // Should be polyfilled for IE
     });
   });
   document.addEventListener('keydown', (evt) => {
-    const keycode = evt.key.toUpperCase().charCodeAt(0);
-    const myKey = document.querySelector('.key[data-key="'+keycode+'"]');
-    myKey.classList.add('playing'); // Should be polyfilled for IE
+    playSound(evt.keyCode);
   });
-  document.addEventListener('keypress', (evt) => {
-    //KEYPRESS SO IT WILL REPEAT IF KEY IS HELD
-    const keycode = evt.key.toUpperCase().charCodeAt(0);
-    const myAudio = document.querySelector('audio[data-key="'+keycode+'"]');
-    myAudio.play();
-  });
-  document.addEventListener('keyup', (evt) => {
-    const keycode = evt.key.toUpperCase().charCodeAt(0);
-    const myKey = document.querySelector('.key[data-key="'+keycode+'"]');
-    myKey.classList.remove('playing'); // Should be polyfilled
-    //console.log(evt.key.toUpperCase().charCodeAt(0));
-  });
+  // document.addEventListener('keypress', (evt) => {
+  //   // CAN'T USE KEYCODE HERE! IT MAY BE WRONG (CAPITAL A <> LOWER A)
+  //   const keycode = evt.key.toUpperCase().charCodeAt(0);
+  //   const myAudio = document.querySelector('audio[data-key="'+keycode+'"]');
+  //   if(!myAudio) return;
+  //   myAudio.play();
+  // });
+  // document.addEventListener('keyup', (evt) => {
+  //   const myKey = document.querySelector('.key[data-key="'+evt.keyCode+'"]');
+  //   myKey.classList.remove('playing'); // Should be polyfilled
+  //   //console.log(evt.key.toUpperCase().charCodeAt(0));
+  // });
 </script>
 
 
