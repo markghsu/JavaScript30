@@ -63,6 +63,7 @@
       position: absolute;
       top: 50%;
       transform-origin: right;
+      transition: 0.3s transform ease-out;
     }
     .second-hand {
       background: red;
@@ -80,9 +81,15 @@
       setTimeout(setTime, 1);
     }
     function setAngle(hand,angle) {
+      if (angle == 0) {
+        document.querySelector(`.${hand}-hand`).style.transition = 'inherit';
+      } else {
+        document.querySelector(`.${hand}-hand`).style.transition = '0.3s transform ease-out'; //ugly...
+      }
       document.querySelector(`.${hand}-hand`).style.transform = `rotateZ(${angle - 270}deg)`;
     }
     setTime();
+    //setInterval(setTime, 1000);
   </script>
 </body>
 </html>
