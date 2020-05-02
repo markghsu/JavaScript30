@@ -28,9 +28,11 @@
     }
 
     .main-img {
-      border-style: solid;
+      /*border-style: solid;
       border-width: var(--spacing);
-      border-color: var(--base);
+      border-color: var(--base);*/
+      padding: var(--spacing);
+      background: var(--base);
       filter: blur(var(--blur));
     }
     .hl {
@@ -58,7 +60,10 @@
     }
   </style>
   <script>
-    document.querySelectorAll('input').forEach(a => {a.addEventListener('change', varChange)});
+    document.querySelectorAll('input').forEach(a => {
+      a.addEventListener('change', varChange);
+      a.addEventListener('mousemove', varChange);
+    });
     function varChange(evt) {
       document.documentElement.style.setProperty('--'+this.name,this.value + (this.dataset.sizing||'') );
     }
