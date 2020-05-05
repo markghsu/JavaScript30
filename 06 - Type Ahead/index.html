@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="overlay" id="overlay"><h1>Waiting for API to load...</h1></div>
+  <form class="search-form">
+    <input type="text" id="search" name="search" class="search" placeholder="City or State">
+    <ul id="suggestions" class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+let dataList;
+fetch(endpoint)
+  .then((response) => response.json())
+  .then(data => {
+    dataList = data;
+    document.querySelector('#search').addEventListener('input', autocomplete);
+    document.querySelector('#overlay').classList.add('none');
+  })
+  .catch((err) => console.log(err));
+
+function autocomplete(evt) {
+  const searchFor = this.value.toLowerCase();
+  let items = dataList.filter(
+    ({city, state}) => city.toLowerCase().includes(searchFor) || state.toLowerCase().includes(searchFor))
+    .sort((a,b) => {
+      return b.population - a.population;
+      // if(a.state.toLowerCase() == b.state.toLowerCase()) {
+      //     return a.city.toLowerCase() > b.city.toLowerCase()?1:-1;
+      //   }
+      // return (a.state.toLowerCase() > b.state.toLowerCase())?1:-1;
+    }).reduce((a,ele) => a+=createLi(ele,searchFor),'');
+  document.querySelector('#suggestions').innerHTML = items;
+}
+
+document.addEventListener('submit', doNothing);
+function doNothing(evt) {
+  evt.preventDefault();
+}
+
+function createLi(data, highlight) {
+  const myRegex = new RegExp(`(${escapeRegExp(highlight)})`,'gi');
+  return `<li>${data.city.replace(myRegex,'<span class="highlight">$1</span>')}, ${data.state.replace(myRegex,'<span class="highlight">$1</span>')}</li>`
+}
+
+function escapeRegExp(string) {
+  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+</script>
+</body>
+</html>
