@@ -48,7 +48,7 @@ function doNothing(evt) {
 
 function createLi(data, highlight) {
   const myRegex = new RegExp(`(${escapeRegExp(highlight)})`,'gi');
-  return `<li>${data.city.replace(myRegex,'<span class="highlight">$1</span>')}, ${data.state.replace(myRegex,'<span class="highlight">$1</span>')}</li>`
+  return `<li><span class="city-name">${data.city.replace(myRegex,'<span class="hl">$1</span>')}, ${data.state.replace(myRegex,'<span class="hl">$1</span>')}</span><span class="population">${data.population}</span></li>`
 }
 
 function escapeRegExp(string) {
