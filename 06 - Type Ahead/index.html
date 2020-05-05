@@ -28,9 +28,9 @@ fetch(endpoint)
   .catch((err) => console.log(err));
 
 function autocomplete(evt) {
-  const searchFor = this.value.toLowerCase();
+  const searchFor = new RegExp(`(${escapeRegExp(this.value)})`,'gi');
   let items = dataList.filter(
-    ({city, state}) => city.toLowerCase().includes(searchFor) || state.toLowerCase().includes(searchFor))
+    ({city, state}) => city.match(searchFor) || state.match(searchFor))
     .sort((a,b) => {
       return b.population - a.population;
       // if(a.state.toLowerCase() == b.state.toLowerCase()) {
@@ -46,8 +46,7 @@ function doNothing(evt) {
   evt.preventDefault();
 }
 
-function createLi(data, highlight) {
-  const myRegex = new RegExp(`(${escapeRegExp(highlight)})`,'gi');
+function createLi(data, myRegex) {
   return `<li><span class="city-name">${data.city.replace(myRegex,'<span class="hl">$1</span>')}, ${data.state.replace(myRegex,'<span class="hl">$1</span>')}</span><span class="population">${data.population}</span></li>`
 }
 
