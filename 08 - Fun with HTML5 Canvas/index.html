@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+	const canvas = document.getElementById("draw");
+	const ctx = canvas.getContext("2d");
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	let drawing = false;
+	let stroke = 20;
+	let lastX = 0;
+	let lastY = 0;
+	let step = 1;
+	let hue = 0;
+	ctx.lineCap = "round";
+	ctx.lineJoin = "round";
+	canvas.addEventListener("mousedown", (evt) => {
+		drawing = true;
+		lastX = evt.clientX;
+		lastY = evt.clientY;
+	});
+	canvas.addEventListener("mouseup", () => {
+		drawing = false;
+	});
+	canvas.addEventListener("mouseout", () => {
+		drawing = false;
+	});
+	canvas.addEventListener("mousemove", drawPic);
+	function drawPic(evt){
+		if(!drawing) return;
+
+		ctx.strokeStyle = 'hsl(' + hue + ',100%, 70%)';
+		ctx.lineWidth = stroke;
+		ctx.beginPath();
+		ctx.moveTo(lastX,lastY);
+		ctx.lineTo(evt.clientX,evt.clientY);
+		ctx.stroke();
+		lastX = evt.clientX;
+		lastY = evt.clientY;
+		stroke += step;
+		if(stroke >= 100 || stroke <= 1) step = -1*step;
+		hue = (hue + 1)%(360);
+	}
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
