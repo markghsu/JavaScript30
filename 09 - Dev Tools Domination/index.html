@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // right click dom element - break on - attribute modified
+
+    // Regular
+    console.log('blah');
+    // Interpolated
+    console.log('hello %s',dogs[0].name);
+    // Styled
+    console.log('%c hello','font-weight: bold');
+    // warning!
+    console.warn('warning....');
+    // Error :|
+    console.error('blue');
+    // Info
+    console.info('tttu');
+    // Testing
+    console.assert('a' == 'b','assertion is wrong!');
+    // clearing
+    console.clear();
+    // Viewing DOM Elements
+    console.dir(document.querySelector('p'))//shows you expandable dom element
+    // Grouping together
+    console.group('groupName');
+    console.log('blah');
+    console.log('doop');
+    console.groupEnd('groupName');
+    // counting
+    console.count('blah'); //logs how many times we've called count on this argument
+    // timing
+    console.time('timername');
+    //something that takes time here
+    setTimeout(() => {
+      console.timeEnd('timername');
+    }, 300);
+    console.table();
+  </script>
+</body>
+</html>
