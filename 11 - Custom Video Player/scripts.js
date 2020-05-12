@@ -17,11 +17,11 @@ video.addEventListener('pause', () => {playBtn.innerHTML = "►"});
 volSlider.addEventListener('change', setVidProp);
 playRateSlider.addEventListener('change', setVidProp);
 seek.style.flexBasis = 0;
-document.querySelector('.progress').addEventListener('mouseDown', handleSeek);
+document.querySelector('.progress').addEventListener('click', handleScrub);
 
-function handleSeek(evt) {
-  //DUE TO NOT HAVING DRAG, WE HAVE TO SEEK USING MOUSEDOWN/MOVE/UP?
-
+function handleScrub(evt) {
+  //DUE TO NOT HAVING DRAG, WE HAVE TO SEEK USING CLICK
+  video.currentTime = video.duration*evt.offsetX/this.offsetWidth;
 }
 
 function handlePlay(evt) {
