@@ -17,11 +17,28 @@ video.addEventListener('pause', () => {playBtn.innerHTML = "►"});
 volSlider.addEventListener('change', setVidProp);
 playRateSlider.addEventListener('change', setVidProp);
 seek.style.flexBasis = 0;
-document.querySelector('.progress').addEventListener('click', handleScrub);
+let mousedown = false;
+const fullprogressbar = document.querySelector('.progress')
+fullprogressbar.addEventListener('click', handleScrub);
+fullprogressbar.addEventListener('mousedown', () => mousedown = true);
+fullprogressbar.addEventListener('mouseup', () => mousedown = false);
+fullprogressbar.addEventListener('mouseout', () => mousedown = false);
+fullprogressbar.addEventListener('mousemove', (evt) => mousedown && handleScrub(evt));
+document.querySelector('.fullscreen').addEventListener('click', toggleFullscreen);
+
+function toggleFullscreen(evt) {
+  if(!document.fullscreenElement) {
+    video.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
 
 function handleScrub(evt) {
-  //DUE TO NOT HAVING DRAG, WE HAVE TO SEEK USING CLICK
-  video.currentTime = video.duration*evt.offsetX/this.offsetWidth;
+  //DUE TO NOT HAVING DRAG, WE HAVE TO SEEK USING CLICK/MD/MM/MU
+  video.currentTime = video.duration*evt.offsetX/fullprogressbar.offsetWidth;
 }
 
 function handlePlay(evt) {
