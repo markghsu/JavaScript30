@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+	const keysequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+	let counter = 0;
+	let timeoutFunc = null;
+	window.addEventListener('keyup', (evt) => {
+		if(timeoutFunc) clearTimeout(timeoutFunc);
+		timeoutFunc = setTimeout(() => {counter = 0}, 1000);
+		console.log('pressed!',evt.key);
+		if(evt.key == keysequence[counter]) {
+			console.log('correct!',counter);
+			counter++;
+			if(counter == keysequence.length){
+				alert('You entered the key sequence!');
+				cornify_add();
+				counter = 0;
+			}
+		} else {
+			counter = 0;
+		}
+	});
+</script>
+</body>
+</html>
