@@ -44,27 +44,52 @@
 
   <script>
     const images = document.querySelectorAll('.slide-in');
-    window.addEventListener('scroll', onScroll);
+    // window.addEventListener('scroll', onScroll);
 
-    let lastScrollY = 0;
-    let ticking = false;
+    // let lastScrollY = 0;
+    // let ticking = false;
 
-    function onScroll() {
-      lastScrollY = window.scrollY;
-      requestTick();
+    // function onScroll() {
+    //   lastScrollY = window.scrollY;
+    //   requestTick();
+    // }
+    // function requestTick() {
+    //   if(!ticking) {
+    //     //ONLY REQUEST TO UPDATE PAGE IF WE HAVEN'T ALREADY REQUESTED.
+    //     requestAnimationFrame(checkImage);
+    //   }
+    //   ticking = true;
+    // }
+
+    // function checkImage(evt) {
+    //   ticking = false;
+    //   images.forEach((img) => {
+    //     if(img.offsetTop <= lastScrollY + window.innerHeight && img.offsetTop + img.offsetHeight >= lastScrollY) {
+    //       img.classList.add('active');
+    //     } else {
+    //       img.classList.remove('active');
+    //     }
+    //   });
+    // }
+
+    function debounce(func, wait = 20, immediate = true) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args); //IF IT'S IMMEDIATE, WHEN TIMEOUT CALLS THIS WE DO NOTHING.
+        };
+        var callNow = immediate && !timeout; //DON'T CALL IF WE ALREADY CALLED (e.g. we are waiting on a timeout)
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
     }
-    function requestTick() {
-      if(!ticking) {
-        //ONLY REQUEST TO UPDATE PAGE IF WE HAVEN'T ALREADY REQUESTED.
-        requestAnimationFrame(checkImage);
-      }
-      ticking = true;
-    }
-
-    function checkImage(evt) {
-      ticking = false;
+    window.addEventListener('scroll', debounce(checkImages,20));
+    function checkImages(evt) {
       images.forEach((img) => {
-        if(img.offsetTop <= lastScrollY + window.innerHeight && img.offsetTop + img.offsetHeight >= lastScrollY) {
+        if(img.offsetTop <= window.scrollY + window.innerHeight && img.offsetTop + img.offsetHeight >= window.scrollY) {
           img.classList.add('active');
         } else {
           img.classList.remove('active');
