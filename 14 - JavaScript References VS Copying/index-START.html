@@ -27,11 +27,13 @@
     // So, how do we fix this? We take a copy instead!
 
     // one way
-    const copyarr = players.slice(0);
+    const copyarr = players.slice();
     // or create a new array and concat the old one in
     const newarr = [].concat(players);
     // or use the new ES6 Spread
     const spreader = [...players];
+
+    const pp = Array.from(players);
     // now when we update it, the original one isn't changed
     newarr.push('newarr');
     copyarr.push('copyarr');
