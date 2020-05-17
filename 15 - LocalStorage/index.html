@@ -28,26 +28,29 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const localStorage = window.localStorage;
-  const items = localStorage.items?JSON.parse(localStorage.items):[];
-  itemsList.innerHTML = items.map((ele,idx) => (`<li><input name='checkbox' type='checkbox' data-index="${idx}" id='item${idx}' ${ele.done && 'checked'} ><label for='item${idx}'>${ele.text}</label></li>`)).join('');
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+
+  itemsList.innerHTML = '';
+  itemsList.append(...(items.map((ele,idx) => createEntry(ele.text,idx,ele.done))));
+
   addItems.addEventListener('submit', addItem);
-  itemsList.querySelectorAll('input').forEach((ele) => {
-    ele.addEventListener('change', handleCheck);
-  });
+  itemsList.addEventListener('change', handleCheck);
+
   function addItem (evt) {
     items.push({text:this.item.value, done:false});
-    const node = document.createElement("LI");
-    node.innerHTML =`<input name='checkbox' type='checkbox' data-index="${items.length - 1}" id='item${items.length - 1}'/><label for='item${items.length - 1}'>${this.item.value}</label>`;
-    itemsList.appendChild(node);
-    node.addEventListener('change', handleCheck);
-    localStorage.items = JSON.stringify(items);
+    itemsList.appendChild(createEntry(this.item.value,items.length - 1,false));
+    localStorage.setItem('items', JSON.stringify(items));
     evt.preventDefault();
     this.reset();
   }
   function handleCheck(evt) {
     items[evt.target.dataset.index].done = evt.target.checked;
     localStorage.items = JSON.stringify(items);
+  }
+  function createEntry(text,index,checked) {
+    node = document.createElement('LI');
+    node.innerHTML =`<input name="checkbox" type="checkbox" data-index="${index}" id="item${index}" ${checked?"checked":""}/><label for="item${index}">${text}</label>`;
+    return node;
   }
 
 </script>
