@@ -13,19 +13,26 @@
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new window.SpeechRecognition();
   recognition.lang = 'en-US';
-  recognition.interimResults = false;
+  recognition.interimResults = true; //allow it to send words mid-sentence
   const textField = document.querySelector('.words');
+  let lastPara = null;
 
+  newPara();
   recognition.start();
   recognition.onresult = function(evt) {
-    const textnode = document.createTextNode(evt.results[0][0].transcript);
-    textField.appendChild(textnode);
+    lastPara.innerHTML = (evt.results[0][0].transcript);
   };
   recognition.onend = function() {
+    console.log("ending...")
     //CHROME AUTO-STOPS
+    newPara();
     recognition.start();
   }
-
+  function newPara(){
+    const para = document.createElement("p");
+    textField.appendChild(para);
+    lastPara = para;
+  }
 </script>
 
 
