@@ -17,9 +17,9 @@
   html {
     box-sizing: border-box;
   }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
+
+  *, *:before, *:after {
+    box-sizing: inherit;
   }
 
   div {
@@ -42,7 +42,18 @@
 
 <button></button>
 <script>
+  const divs = document.querySelectorAll('div');
 
+  function logme(e) {
+    console.log(this.classList.value);
+    //e.stopPropagation();
+  }
+  function logafter(e) {
+    console.log('after',this.classList.value);
+    e.stopPropagation();
+  }
+  divs.forEach((ele) => ele.addEventListener('click', logme, {capture:true, once:true}));
+  divs.forEach((ele) => ele.addEventListener('click', logafter, {capture:false}));
 </script>
 </body>
 </html>
